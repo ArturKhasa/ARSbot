@@ -1,22 +1,22 @@
 from telebot import types
 from adaptive_help_func_telebot import *
-from config import dlc
+from config import dlc, game
 from math import ceil
 
 ### Блок Игры и DLC
 def buygamedlc(message):
     markup = types.InlineKeyboardMarkup()
-    btn1 = types.InlineKeyboardButton("Нет, не менял", callback_data="Нет, не менял")
-    btn2 = types.InlineKeyboardButton("Да, менял", callback_data="Да, менял")
+    btn1 = types.InlineKeyboardButton("Нет, не менял", callback_data="buygamedlc_noeditmenu")
+    btn2 = types.InlineKeyboardButton("Да, менял", callback_data="buygamedlc_yeseditmenu")
     markup.row(btn1, btn2)
-    btn3 = types.InlineKeyboardButton("Как узнать", callback_data="Как узнать")
+    btn3 = types.InlineKeyboardButton("Как узнать", callback_data="buygamedlc_howtofind")
     markup.row(btn3)
     btn4 = types.InlineKeyboardButton("Назад", callback_data="Epic Games")
     markup.row(btn4)
     img_block(r'src\BuyGameDLC\gamedlc.jpg', message, markup, text="Вы меняли регион за последние 6 месяцев?")
 
 
-def noeditmenu(message):
+def buygamedlc_noeditmenu(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Игры", callback_data="Игры")
     btn2 = types.InlineKeyboardButton("DLC", callback_data="DLC")
@@ -25,16 +25,16 @@ def noeditmenu(message):
     img_block(r'src\BuyGameDLC\gamedlc.jpg', message, markup)
 
 
-def yeseditmenu(message):
+def buygamedlc_yeseditmenu(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
-    btn1 = types.InlineKeyboardButton("Турция", callback_data="Нет, не менял")
-    btn2 = types.InlineKeyboardButton("Другая", callback_data="Другая")
+    btn1 = types.InlineKeyboardButton("Турция", callback_data="buygamedlc_noeditmenu")
+    btn2 = types.InlineKeyboardButton("Другая", callback_data="othercountry")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="Покупка игр и DLC")
     markup.add(btn1, btn2, btn3)
     img_block(r'src\BuyGameDLC\gamedlc.jpg', message, markup, text="Какая страна стоит?")
 
 
-def howtofind(message):
+def buygamedlc_howtofind(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Назад", callback_data="Покупка игр и DLC")
     markup.add(btn1)
@@ -48,23 +48,23 @@ def othercountry(message):
     text_block("К сожалению мы не сможем изменить вам регион, так как за последние 6 месяцев он был изменен.", message, markup)
 
 
-def gameegs(message, text=''):
+def gameegs(message, t=''):
     markup = types.InlineKeyboardMarkup()
-    btn1 = types.InlineKeyboardButton("MARVEL Человек-Паук: Майлз Моралес", callback_data="MARVEL Человек-Паук: Майлз Моралес")
-    btn2 = types.InlineKeyboardButton("Red Dead Redemption 2", callback_data="Red Dead Redemption 2")
-    markup.row(btn1, btn2)
-    btn3 = types.InlineKeyboardButton("Dying Light 2 ", callback_data="Dying Light 2 ")
-    btn4 = types.InlineKeyboardButton("Stay Human", callback_data="Stay Human")
-    markup.row(btn3, btn4)
-    btn5 = types.InlineKeyboardButton("Far Cry® 6", callback_data="Far Cry® 6")
-    btn6 = types.InlineKeyboardButton("It takes two", callback_data="It takes two")
-    markup.row(btn5, btn6)
-    btn7 = types.InlineKeyboardButton("FIFA 23 «Standard»", callback_data="FIFA 23 «Standard»")
-    markup.row(btn7)
-    btn8 = types.InlineKeyboardButton("Назад", callback_data="Нет, не менял")
-    btn9 = types.InlineKeyboardButton("Другие игры", callback_data="Другие игры")
-    markup.row(btn8, btn9)
-    img_block(r'src\BuyGameDLC\game.jpg', message, markup, text=text)
+    name_game = [i for i in game.keys()]
+    count_el_page = len(name_game)
+    if count_el_page % 2 == 0:
+        for i in range(0, count_el_page, 2):
+            markup.row(types.InlineKeyboardButton(name_game[i], callback_data=name_game[i]),
+                        types.InlineKeyboardButton(name_game[i + 1], callback_data=name_game[i + 1]))
+    else:
+        for i in range(0, count_el_page, 2):
+            try:
+                markup.row(types.InlineKeyboardButton(name_game[i], callback_data=name_game[i]),
+                            types.InlineKeyboardButton(name_game[i + 1], callback_data=name_game[i + 1]))
+            except:
+                markup.row(types.InlineKeyboardButton(name_game[i], callback_data=name_game[i]))
+    markup.row(types.InlineKeyboardButton('Назад', callback_data='buygamedlc_noeditmenu'))
+    img_block(r'src\BuyGameDLC\game.jpg', message, markup, text=t)
 
 
 def othergamesegs(message):
@@ -98,7 +98,23 @@ def get_sum(message):
                      text=f"К оплате {rublzn} руб.".format(message.from_user), 
                      reply_markup=markup)
     else:
-        gameegs(message, "Неправильно введено значение, повторите операцию.")
+        markup = types.InlineKeyboardMarkup()
+        btn1 = types.InlineKeyboardButton("MARVEL Человек-Паук: Майлз Моралес", callback_data="MARVEL Человек-Паук: Майлз Моралес")
+        btn2 = types.InlineKeyboardButton("Red Dead Redemption 2", callback_data="Red Dead Redemption 2")
+        markup.row(btn1, btn2)
+        btn3 = types.InlineKeyboardButton("Dying Light 2 ", callback_data="Dying Light 2 ")
+        btn4 = types.InlineKeyboardButton("Stay Human", callback_data="Stay Human")
+        markup.row(btn3, btn4)
+        btn5 = types.InlineKeyboardButton("Far Cry® 6", callback_data="Far Cry® 6")
+        btn6 = types.InlineKeyboardButton("It takes two", callback_data="It takes two")
+        markup.row(btn5, btn6)
+        btn7 = types.InlineKeyboardButton("FIFA 23 «Standard»", callback_data="FIFA 23 «Standard»")
+        markup.row(btn7)
+        btn8 = types.InlineKeyboardButton("Назад", callback_data="Нет, не менял")
+        btn9 = types.InlineKeyboardButton("Другие игры", callback_data="Другие игры")
+        markup.row(btn8, btn9)
+        photo = open(r'src\BuyGameDLC\game.jpg', 'rb')
+        bot.send_photo(message.chat.id, photo, caption="Неправильно введено значение, повторите операцию.", reply_markup=markup)
 
 
 def netxpaygame(message):
@@ -145,13 +161,13 @@ def get_sendlogin(message):
 
 def dlcegs(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
-    btn1 = types.InlineKeyboardButton("Dead by daylight", callback_data="Dead by daylight")
+    btn1 = types.InlineKeyboardButton("Dead by daylight", callback_data="DLCBUY")
     btn2 = types.InlineKeyboardButton("Назад", callback_data="Нет, не менял")
     markup.add(btn1, btn2)
     img_block(r'src\BuyGameDLC\dlc.jpg', message, markup, text='')
 
 
-def deadbydaylight(message):
+def dlcbuy(message):
     markup = types.InlineKeyboardMarkup(row_width=1)
     btn1 = types.InlineKeyboardButton("Купить", callback_data="1_pagedlcbuy")
     btn2 = types.InlineKeyboardButton("Назад", callback_data="DLC")
@@ -182,7 +198,7 @@ def dlcNpage(message, number_page):
                 except:
                     markup.row(types.InlineKeyboardButton(name_dlc[i], callback_data=name_dlc[i]))
     markup.row(*[types.InlineKeyboardButton(str(i), callback_data=f"{i}_pagedlcbuy") for i in range(1, cout_page + 1)])
-    markup.row(types.InlineKeyboardButton('Назад', callback_data='BackDLCToDLCEGS'))
+    markup.row(types.InlineKeyboardButton('Назад', callback_data='DLC'))
     img_block(f'src\\BuyGameDLC\\dlc{number_page}.jpg', message, markup, text="Инструкция будет*")
 
 

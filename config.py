@@ -1,8 +1,21 @@
 import telebot
+import psycopg2
 
 TOKEN = '6668402751:AAHvjdKsykwnhN_tnMbIwgscZLbW71lCQR4'
 
+dbname = 'testDataBase'
+user = 'studentsuserdb'
+password = 'Gesg6Gesg6564tJOI564tJOI'
+host = 'rc1a-8vbl7plj2e5k8djt.mdb.yandexcloud.net'
+port = '6432'
+
 bot = telebot.TeleBot(TOKEN)
+conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
+
+cur = conn.cursor()
+cur.execute("SELECT * FROM kits")
+rows = cur.fetchall()
+fortnitesets = [row[2] for row in rows]
 
 
 dlc = {
@@ -52,20 +65,20 @@ game = {
 
 
 golden_cage = {
-    "500goldencage": 999,
-    "1100goldencage": 999,
-    "2250goldencage": 999,
-    "4025goldencage": 999,
-    "6000goldencage": 999,
-    "12500goldencage": 999
+    "500_goldencage": 999,
+    "1100_goldencage": 999,
+    "2250_goldencage": 999,
+    "4025_goldencage": 999,
+    "6000_goldencage": 999,
+    "12500_goldencage": 999
     }
 
 
 shmacks = {
-    "1000shmacks": 999,
-    "2800shmacks": 999,
-    "5000shmacks": 999,
-    "13500shmacks": 999
+    "1000_shmacks": 999,
+    "2800_shmacks": 999,
+    "5000_shmacks": 999,
+    "13500_shmacks": 999
     }
 
 
@@ -84,10 +97,10 @@ fallguysset = {
 
 
 vbucks = {
-    "1000vbucks": 999,
-    "2800vbucks": 999,
-    "5000vbucks": 999,
-    "13500vbucks": 999
+    "1000_vbucks": 999,
+    "2800_vbucks": 999,
+    "5000_vbucks": 999,
+    "13500_vbucks": 999
     }
 
 # name_dlc = [i for i in dlc.keys()]
