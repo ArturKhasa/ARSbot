@@ -8,7 +8,8 @@ from egsblock_gamedlc import *
 from donate_dbd import *
 from donate_fallguys import *
 from donate_fortnite import *
-
+from PIL import Image, ImageEnhance
+import PIL
 
 @bot.message_handler(commands=['start'])
 def menu(message):
@@ -19,8 +20,31 @@ def menu(message):
     btn4 = types.InlineKeyboardButton("F.A.Q 📌", callback_data="F.A.Q 📌")
     btn5 = types.InlineKeyboardButton("Поддержка 👨‍💻", url='https://t.me/GameShopARS')
     markup.add(btn1, btn2, btn3, btn4, btn5)
-    photo = open(r'src\Menu\menu.jpg', 'rb')
+    photo = open(r'src\Menu\main.jpg', 'rb')
     bot.send_photo(message.chat.id, photo, reply_markup=markup)
+
+
+@bot.message_handler(commands=['photo'])
+def send_avatar(message):
+    chat_id = message.chat.id
+    photos = bot.get_user_profile_photos(chat_id)
+    photo_id = photos.photos[0][-1].file_id
+    file_info = bot.get_file(photo_id)
+    file = bot.download_file(file_info.file_path)
+
+    with open(f'time_src_ava\\{message.chat.id}.jpg', 'wb') as f:
+        f.write(file)
+
+    bot.send_photo(message.chat.id, file)
+
+    new = Image.new("RGBA", (700,200))
+
+    img = Image.open(f'time_src_ava\\{message.chat.id}.jpg')
+    img = img.resize((170,170))
+    new.paste(img, (0,0))
+    new.paste(img, (500,500))
+
+    new.show()
 
 
 def store(message):
@@ -51,9 +75,10 @@ def reviews(message):
     btn1 = types.InlineKeyboardButton("Перейти", url='https://t.me/GameShopARS')
     btn2 = types.InlineKeyboardButton("Назад", callback_data="BackToMenu")
     markup.add(btn1, btn2)
-    text_block("Здесь мы собираем отзывы наших клиентов. Вы можете задать любой вопрос участникам, кто ранее у нас делал заказы и убедиться, что всё прозрачно и честно.",
-               message,
-               markup)
+    # text_block("Здесь мы собираем отзывы наших клиентов. Вы можете задать любой вопрос участникам, кто ранее у нас делал заказы и убедиться, что всё прозрачно и честно.",
+    #            message,
+    #            markup)
+    img_block(r"src\Menu\feedback.jpg", message, markup, "Здесь мы собираем отзывы наших клиентов. Вы можете задать любой вопрос участникам, кто ранее у нас делал заказы и убедиться, что всё прозрачно и честно.")
 
 
 def guide(message):
@@ -61,9 +86,11 @@ def guide(message):
     btn1 = types.InlineKeyboardButton("Перейти", url='https://t.me/GameShopARS')
     btn2 = types.InlineKeyboardButton("Назад", callback_data="BackToMenu")
     markup.add(btn1, btn2)
-    text_block("Здесь мы собрали наиболее актуальные вопросы наших клиентов. Если не найдёте ответ на свой вопрос, то напишите нам в службу поддержки.",
-               message,
-               markup)
+    # text_block("Здесь мы собрали наиболее актуальные вопросы наших клиентов. Если не найдёте ответ на свой вопрос, то напишите нам в службу поддержки.",
+    #            message,
+    #            markup)
+    img_block(r"src\Menu\faq.jpg", message, markup, "Здесь мы собрали наиболее актуальные вопросы наших клиентов. Если не найдёте ответ на свой вопрос, то напишите нам в службу поддержки.")
+    
 
 def egsblock(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
