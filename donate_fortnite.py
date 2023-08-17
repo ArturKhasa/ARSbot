@@ -1,7 +1,7 @@
 from telebot import types
 from adaptive_help_func_telebot import *
-from math import ceil
-from config import fortnitesets
+from config import conn
+import requests
 
 
 def fortnite(message):
@@ -15,10 +15,10 @@ def fortnite(message):
 
 def epicgamesaccount(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
-    btn1 = types.InlineKeyboardButton("Нет, не менял", callback_data="epicgamesaccount_noeditmenu")
-    btn2 = types.InlineKeyboardButton("Да, менял", callback_data="epicgamesaccount_yeseditmenu")
+    btn1 = types.InlineKeyboardButton("Нет, не менял", callback_data="epicgamesaccountnoeditmenu")
+    btn2 = types.InlineKeyboardButton("Да, менял", callback_data="epicgamesaccountyeseditmenu")
     markup.row(btn1, btn2)
-    btn3 = types.InlineKeyboardButton("Как узнать", callback_data="epicgamesaccount_howtofind")
+    btn3 = types.InlineKeyboardButton("Как узнать", callback_data="epicgamesaccounthowtofind")
     markup.row(btn3)
     btn4 = types.InlineKeyboardButton("Назад", callback_data="fortnite")
     markup.row(btn4)
@@ -28,7 +28,7 @@ def epicgamesaccount(message):
 def epicgamesaccount_noeditmenu(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("V-bucks", callback_data="vbucks")
-    btn2 = types.InlineKeyboardButton("Наборы", callback_data="sets_egs_xbox")
+    btn2 = types.InlineKeyboardButton("Наборы", callback_data="setsegsxbox")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="epicgamesaccount")
     markup.add(btn1, btn2, btn3)
     img_block(r'src\Donate\vbuck_and_sets_1.jpg', message, markup)
@@ -36,8 +36,8 @@ def epicgamesaccount_noeditmenu(message):
 
 def epicgamesaccount_yeseditmenu(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
-    btn1 = types.InlineKeyboardButton("Турция", callback_data="epicgamesaccount_noeditmenu")
-    btn2 = types.InlineKeyboardButton("Другая", callback_data="epicgamesaccount_another")
+    btn1 = types.InlineKeyboardButton("Турция", callback_data="epicgamesaccountnoeditmenu")
+    btn2 = types.InlineKeyboardButton("Другая", callback_data="epicgamesaccountanother")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="epicgamesaccount")
     markup.add(btn1, btn2, btn3)
     img_block(r'src\Donate\fortnite_egs.jpg', message, markup, text="Какая страна стоит?")
@@ -60,8 +60,8 @@ def epicgamesaccount_another(message):
 
 def xboxaccout(message):
     markup = types.InlineKeyboardMarkup(row_width=1)
-    btn1 = types.InlineKeyboardButton("Да, привязана", callback_data="xboxaccout_yeslinked")
-    btn2 = types.InlineKeyboardButton("Как привязать?", callback_data="xboxaccout_howlinked")
+    btn1 = types.InlineKeyboardButton("Да, привязана", callback_data="xboxaccoutyeslinked")
+    btn2 = types.InlineKeyboardButton("Как привязать?", callback_data="xboxaccouthowlinked")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="fortnite")
     markup.add(btn1, btn2, btn3)
     img_block(r'src\Donate\fortnite_xbox.jpg', message, markup, text="У вас привязана учетная запись microsoft xbox к epic games?")
@@ -70,7 +70,7 @@ def xboxaccout(message):
 def xboxaccout_yeslinked(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("V-bucks", callback_data="vbucks")
-    btn2 = types.InlineKeyboardButton("Наборы", callback_data="sets_egs_xbox")
+    btn2 = types.InlineKeyboardButton("Наборы", callback_data="setsegsxbox")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="fortnite")
     markup.add(btn1, btn2, btn3)
     img_block(r'src\Donate\vbuck_and_sets_2.jpg', message, markup)
@@ -105,7 +105,24 @@ def N_vbucks(message, N):
 
 def sets_egs_xbox(message):
     markup = types.InlineKeyboardMarkup(row_width=1)
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM kits LEFT JOIN kits_description ON kits.id = kits_description.kit_id")
+    rows = cur.fetchall()
+    fortnitesets = [[row[2], row[6]] for row in rows]
     for name in fortnitesets:
-        markup.row(types.InlineKeyboardButton(name, callback_data=name))
+        markup.row(types.InlineKeyboardButton(name[0], callback_data='setsfortnite_'+name[0]))
     markup.row(types.InlineKeyboardButton('Назад', callback_data='fortnite'))
     img_block(r'src\Donate\fortnite_sets.jpg', message, markup)
+
+
+def name_sets_egs_xbox(message, name):
+    # conn = sqlite3.connect('DataBase\\database.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM kits LEFT JOIN kits_description ON kits.id = kits_description.kit_id WHERE name = %s", (name, ))
+    rows = cursor.fetchall()
+    markup = types.InlineKeyboardMarkup(row_width=2)
+    btn1 = types.InlineKeyboardButton("Купить", callback_data=f"{rows[0][2]}_buy")
+    btn2 = types.InlineKeyboardButton("Добавить в корзину", callback_data=f"{rows[0][2]}_buy")
+    btn3 = types.InlineKeyboardButton("Назад", callback_data="setsegsxbox")
+    markup.add(btn1, btn2, btn3)
+    img_block(f'src\\Donate\\{name}.jpg', message, markup, rows[0][6])

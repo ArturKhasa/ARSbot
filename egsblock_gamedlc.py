@@ -6,10 +6,10 @@ from math import ceil
 ### Блок Игры и DLC
 def buygamedlc(message):
     markup = types.InlineKeyboardMarkup()
-    btn1 = types.InlineKeyboardButton("Нет, не менял", callback_data="buygamedlc_noeditmenu")
-    btn2 = types.InlineKeyboardButton("Да, менял", callback_data="buygamedlc_yeseditmenu")
+    btn1 = types.InlineKeyboardButton("Нет, не менял", callback_data="buygamedlcnoeditmenu")
+    btn2 = types.InlineKeyboardButton("Да, менял", callback_data="buygamedlcyeseditmenu")
     markup.row(btn1, btn2)
-    btn3 = types.InlineKeyboardButton("Как узнать", callback_data="buygamedlc_howtofind")
+    btn3 = types.InlineKeyboardButton("Как узнать", callback_data="buygamedlchowtofind")
     markup.row(btn3)
     btn4 = types.InlineKeyboardButton("Назад", callback_data="Epic Games")
     markup.row(btn4)
@@ -27,7 +27,7 @@ def buygamedlc_noeditmenu(message):
 
 def buygamedlc_yeseditmenu(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
-    btn1 = types.InlineKeyboardButton("Турция", callback_data="buygamedlc_noeditmenu")
+    btn1 = types.InlineKeyboardButton("Турция", callback_data="buygamedlcnoeditmenu")
     btn2 = types.InlineKeyboardButton("Другая", callback_data="othercountry")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="Покупка игр и DLC")
     markup.add(btn1, btn2, btn3)
@@ -63,7 +63,8 @@ def gameegs(message, t=''):
                             types.InlineKeyboardButton(name_game[i + 1], callback_data=name_game[i + 1]))
             except:
                 markup.row(types.InlineKeyboardButton(name_game[i], callback_data=name_game[i]))
-    markup.row(types.InlineKeyboardButton('Назад', callback_data='buygamedlc_noeditmenu'))
+    markup.row(types.InlineKeyboardButton('Другие игры', callback_data='othergamesegs'))
+    markup.row(types.InlineKeyboardButton('Назад', callback_data='buygamedlcnoeditmenu'))
     img_block(r'src\BuyGameDLC\game.jpg', message, markup, text=t)
 
 

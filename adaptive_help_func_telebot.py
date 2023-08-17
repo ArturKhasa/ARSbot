@@ -60,3 +60,26 @@ def backtomenu(message):
 
     thread1.join()
     thread2.join()
+
+
+def backtoadmpanel(message):
+    def function1():
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        btn1 = types.InlineKeyboardButton("Fortnite", callback_data="admfortnite")
+        btn2 = types.InlineKeyboardButton("Выйти с админ панели", callback_data='BackToMenu')
+        markup.add(btn1, btn2)
+        bot.send_message(message.chat.id, 
+                        text="Выберите блок, с которым будете работать.", 
+                        reply_markup=markup)
+    
+    def function2():
+        bot.delete_message(message.chat.id, message.message_id)
+
+    thread1 = threading.Thread(target=function1)
+    thread2 = threading.Thread(target=function2)
+
+    thread2.start()
+    thread1.start()
+
+    thread1.join()
+    thread2.join()

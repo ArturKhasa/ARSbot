@@ -1,6 +1,7 @@
 from telebot import types
 import threading
 from config import bot, game
+import os
 
 from adaptive_help_func_telebot import *
 
@@ -8,8 +9,9 @@ from egsblock_gamedlc import *
 from donate_dbd import *
 from donate_fallguys import *
 from donate_fortnite import *
-from PIL import Image, ImageEnhance
-import PIL
+from admin_panel import *
+from PIL import Image
+
 
 @bot.message_handler(commands=['start'])
 def menu(message):
@@ -20,8 +22,21 @@ def menu(message):
     btn4 = types.InlineKeyboardButton("F.A.Q 📌", callback_data="F.A.Q 📌")
     btn5 = types.InlineKeyboardButton("Поддержка 👨‍💻", url='https://t.me/GameShopARS')
     markup.add(btn1, btn2, btn3, btn4, btn5)
-    photo = open(r'src\Menu\main.jpg', 'rb')
+    photo = open(r'src\Menu\menu.jpg', 'rb')
     bot.send_photo(message.chat.id, photo, reply_markup=markup)
+
+
+@bot.message_handler(commands=['admin'])
+def admin(message):
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    btn1 = types.InlineKeyboardButton("Fortnite", callback_data="admfortnite")
+    # btn2 = types.InlineKeyboardButton("Fall Guys", callback_data="admfallguys")
+    # btn3 = types.InlineKeyboardButton("Dead by daylight", callback_data="admdeadbydaylight")
+    btn4 = types.InlineKeyboardButton("Выйти с админ панели", callback_data='BackToMenu')
+    markup.add(btn1, btn4)
+    bot.send_message(message.chat.id, 
+                     text="Выберите блок, который нужно изменить.", 
+                     reply_markup=markup)
 
 
 @bot.message_handler(commands=['photo'])
@@ -75,9 +90,6 @@ def reviews(message):
     btn1 = types.InlineKeyboardButton("Перейти", url='https://t.me/GameShopARS')
     btn2 = types.InlineKeyboardButton("Назад", callback_data="BackToMenu")
     markup.add(btn1, btn2)
-    # text_block("Здесь мы собираем отзывы наших клиентов. Вы можете задать любой вопрос участникам, кто ранее у нас делал заказы и убедиться, что всё прозрачно и честно.",
-    #            message,
-    #            markup)
     img_block(r"src\Menu\feedback.jpg", message, markup, "Здесь мы собираем отзывы наших клиентов. Вы можете задать любой вопрос участникам, кто ранее у нас делал заказы и убедиться, что всё прозрачно и честно.")
 
 
@@ -86,9 +98,6 @@ def guide(message):
     btn1 = types.InlineKeyboardButton("Перейти", url='https://t.me/GameShopARS')
     btn2 = types.InlineKeyboardButton("Назад", callback_data="BackToMenu")
     markup.add(btn1, btn2)
-    # text_block("Здесь мы собрали наиболее актуальные вопросы наших клиентов. Если не найдёте ответ на свой вопрос, то напишите нам в службу поддержки.",
-    #            message,
-    #            markup)
     img_block(r"src\Menu\faq.jpg", message, markup, "Здесь мы собрали наиболее актуальные вопросы наших клиентов. Если не найдёте ответ на свой вопрос, то напишите нам в службу поддержки.")
     
 
@@ -104,9 +113,9 @@ def egsblock(message):
 def donate(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Fortnite", callback_data="fortnite")
-    btn2 = types.InlineKeyboardButton("Fall Guys", callback_data="fall_guys")
+    btn2 = types.InlineKeyboardButton("Fall Guys", callback_data="fallguys")
     markup.row(btn1, btn2)
-    btn3 = types.InlineKeyboardButton("Dead by daylight", callback_data="dead_by_daylight")
+    btn3 = types.InlineKeyboardButton("Dead by daylight", callback_data="deadbydaylight")
     markup.row(btn3)
     btn4 = types.InlineKeyboardButton("Назад", callback_data="Epic Games")
     markup.row(btn4)
@@ -149,13 +158,13 @@ def callback_handler(call):
         elif call.data == "Покупка игр и DLC":
             buygamedlc(call.message)
 
-        elif call.data == "buygamedlc_noeditmenu":
+        elif call.data == "buygamedlcnoeditmenu":
             buygamedlc_noeditmenu(call.message)
 
-        elif call.data == "buygamedlc_yeseditmenu":
+        elif call.data == "buygamedlcyeseditmenu":
             buygamedlc_yeseditmenu(call.message)
 
-        elif call.data == "buygamedlc_howtofind":
+        elif call.data == "buygamedlchowtofind":
             buygamedlc_howtofind((call.message))
 
         elif call.data == "Игры":
@@ -164,7 +173,7 @@ def callback_handler(call):
         elif call.data == "DLC":
             dlcegs(call.message)
 
-        elif call.data == "Другая":
+        elif call.data == "othercountry":
             othercountry(call.message)
 
         elif call.data == "DLCBUY":
@@ -177,7 +186,22 @@ def callback_handler(call):
             elif call.data.split('_')[1] == 'vbucks':
                 pass
 
-        elif call.data == "Другие игры":
+        elif len(call.data.split('_')) > 1:
+            if call.data.split('_')[0] == 'setsfortnite':
+                name_sets_egs_xbox(call.message, call.data.split('_')[1])
+            
+            elif call.data.split('_')[0] == 'delsetsfortnite':
+                os.remove(f"src\\Donate\\{call.data.split('_')[1]}.jpg")
+                cursor = conn.cursor()
+                cursor.execute("SELECT id FROM kits WHERE name = %s", (call.data.split('_')[1], ))
+                rows = cursor.fetchall()
+                cursor.execute("DELETE FROM kits_description WHERE kit_id = %s", (rows[0][0], ))
+                conn.commit()
+                cursor.execute("DELETE FROM kits WHERE name = %s", (call.data.split('_')[1], ))
+                conn.commit()
+                delsetsfortnite(call.message)
+
+        elif call.data == "othergamesegs":
             othergamesegs(call.message)
 
         elif call.data == "BackToOG":
@@ -205,37 +229,37 @@ def callback_handler(call):
         elif call.data == "NextPayGame":
             netxpaygame(call.message)
 
-        elif call.data == "dead_by_daylight":
+        elif call.data == "deadbydaylight":
             dead_by_daylight(call.message)
 
-        elif call.data == "donate_dead_by_daylight_noeditmenu":
+        elif call.data == "donatedeadbydaylightnoeditmenu":
             donate_dead_by_daylight_noeditmenu(call.message)
 
-        elif call.data == "donate_dead_by_daylight_yeseditmenu":
+        elif call.data == "donatedeadbydaylightyeseditmenu":
             donate_dead_by_daylight_yeseditmenu(call.message)
 
-        elif call.data == "donate_dead_by_daylight_howtofind":
+        elif call.data == "donatedeadbydaylighthowtofind":
             donate_dead_by_daylight_howtofind(call.message)
 
-        elif call.data == "golden_cage":
+        elif call.data == "goldencage":
             golden_cage(call.message)
 
-        elif call.data == "fall_guys":
+        elif call.data == "fallguys":
             fall_guys(call.message)
 
-        elif call.data == "donate_fall_guys_noeditmenu":
+        elif call.data == "donatefallguysnoeditmenu":
             donate_fall_guys_noeditmenu(call.message)
 
-        elif call.data == "donate_fall_guys_yeseditmenu":
+        elif call.data == "donatefallguysyeseditmenu":
             donate_fall_guys_yeseditmenu(call.message)
 
-        elif call.data == "donate_fall_guys_howtofind":
+        elif call.data == "donatefallguyshowtofind":
             donate_fall_guys_howtofind(call.message)
 
         elif call.data == "shmacks":
             shmacks(call.message)
 
-        elif call.data == "fall_guys_set":
+        elif call.data == "fallguysset":
             fall_guys_set(call.message)
 
         elif call.data == "fortnite":
@@ -247,35 +271,35 @@ def callback_handler(call):
         elif call.data == "xboxaccout":
             xboxaccout(call.message)
 
-        elif call.data == "epicgamesaccount_noeditmenu":
+        elif call.data == "epicgamesaccountnoeditmenu":
             epicgamesaccount_noeditmenu(call.message)
 
-        elif call.data == "epicgamesaccount_yeseditmenu":
+        elif call.data == "epicgamesaccountyeseditmenu":
             epicgamesaccount_yeseditmenu(call.message)
 
-        elif call.data == "epicgamesaccount_howtofind":
+        elif call.data == "epicgamesaccounthowtofind":
             epicgamesaccount_howtofind(call.message)
 
-        elif call.data == "epicgamesaccount_another":
+        elif call.data == "epicgamesaccountanother":
             epicgamesaccount_another(call.message)
 
         elif call.data == "vbucks":
             vbucks(call.message)
 
-        elif call.data == "sets_egs_xbox":
+        elif call.data == "setsegsxbox":
             sets_egs_xbox(call.message)
 
-        elif call.data == "xboxaccout_yeslinked":
+        elif call.data == "xboxaccoutyeslinked":
             xboxaccout_yeslinked(call.message)
 
-        elif call.data == "xboxaccout_howlinked":
+        elif call.data == "xboxaccouthowlinked":
             xboxaccout_howlinked(call.message)
 
         elif call.data == "BackToxboxaccout":
             def function1():
                 markup = types.InlineKeyboardMarkup(row_width=1)
-                btn1 = types.InlineKeyboardButton("Да, привязана", callback_data="xboxaccout_yeslinked")
-                btn2 = types.InlineKeyboardButton("Как привязать?", callback_data="xboxaccout_howlinked")
+                btn1 = types.InlineKeyboardButton("Да, привязана", callback_data="xboxaccoutyeslinked")
+                btn2 = types.InlineKeyboardButton("Как привязать?", callback_data="xboxaccouthowlinked")
                 btn3 = types.InlineKeyboardButton("Назад", callback_data="epicgamesaccount")
                 markup.add(btn1, btn2, btn3)
                 photo = open(r'src\Donate\fortnite_xbox.jpg', 'rb')
@@ -292,6 +316,18 @@ def callback_handler(call):
 
             thread1.join()
             thread2.join()
+        
+        elif call.data == "admfortnite":
+            admfortnite(call.message)
+
+        elif call.data == "addsetsfortnite":
+            addsetsfortnite(call.message)
+
+        elif call.data == "delsetsfortnite":
+            delsetsfortnite(call.message)
+
+        elif call.data == "backtoadmpanel":
+            backtoadmpanel(call.message)
 
 
 if __name__ == "__main__":

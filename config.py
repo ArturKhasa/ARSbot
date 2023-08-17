@@ -1,7 +1,10 @@
 import telebot
 import psycopg2
+import sqlite3
 
 TOKEN = '6668402751:AAHvjdKsykwnhN_tnMbIwgscZLbW71lCQR4'
+
+bot = telebot.TeleBot(TOKEN)
 
 dbname = 'testDataBase'
 user = 'studentsuserdb'
@@ -9,14 +12,7 @@ password = 'Gesg6Gesg6564tJOI564tJOI'
 host = 'rc1a-8vbl7plj2e5k8djt.mdb.yandexcloud.net'
 port = '6432'
 
-bot = telebot.TeleBot(TOKEN)
 conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
-
-cur = conn.cursor()
-cur.execute("SELECT * FROM kits")
-rows = cur.fetchall()
-fortnitesets = [row[2] for row in rows]
-
 
 dlc = {
     "Forged in Fog": 999,
@@ -102,30 +98,3 @@ vbucks = {
     "5000_vbucks": 999,
     "13500_vbucks": 999
     }
-
-# name_dlc = [i for i in dlc.keys()]
-# for i in enumerate(name_dlc[0:10]):
-#     print(i)
-
-# from math import ceil
-
-# def vivod(number):
-#     if len(name_dlc[(int(number) - 1) * 10:int(number) * 10]) == 10:
-#         for i in range((int(number) - 1) * 10, int(number) * 10, 2):
-#             print(name_dlc[i], name_dlc[i + 1])
-#     else:
-#         if len(name_dlc) % 2 == 0:
-#             for i in range((int(number) - 1) * 10, len(name_dlc), 2):
-#                 print(name_dlc[i], name_dlc[i + 1])
-#         else:
-#             for i in range((int(number) - 1) * 10, len(name_dlc), 2):
-#                 try:
-#                     print(name_dlc[i], name_dlc[i + 1])
-#                 except:
-#                     print(name_dlc[i])
-#     print(*[i for i in range(1, ceil(len(name_dlc) / 10) + 1)])
-#     print('Назад')
-    
-
-# vivod(4)
-
