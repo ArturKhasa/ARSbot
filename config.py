@@ -14,6 +14,10 @@ port = '6432'
 
 conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
 
+
+admin_list = [217084766,
+         ]
+
 dlc = {
     "Forged in Fog": 999,
     "Resident evil: PROJECT W": 999,
