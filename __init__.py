@@ -1,6 +1,6 @@
 from telebot import types
 import threading
-from config import bot, game, admin_list
+from config import bot, admin_list, feedback_id_group
 import os
 
 from adaptive_help_func_telebot import *
@@ -66,7 +66,7 @@ def get_feedback(message, l):
     feedback = message.text
     feedbackc_card(message.chat.first_name, feedback, l[0])
     photo = open(l[0], 'rb')
-    bot.send_photo(message.chat.id, photo)
+    bot.send_photo(feedback_id_group, photo)
     photo.close()
     os.remove(l[0])
     markup = types.InlineKeyboardMarkup()

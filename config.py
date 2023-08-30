@@ -18,6 +18,8 @@ conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, 
 admin_list = [217084766,
          ]
 
+feedback_id_group = -1001960643500
+
 dlc = {
     "Forged in Fog": 999,
     "Resident evil: PROJECT W": 999,
