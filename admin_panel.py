@@ -10,14 +10,16 @@ def admfortnite(message):
     btn1 = types.InlineKeyboardButton("Добавить набор", callback_data="addsetsfortnite")
     btn2 = types.InlineKeyboardButton("Удалить набор", callback_data='delsetsfortnite')
     btn3 = types.InlineKeyboardButton("Назад", callback_data='backtoadmpanel')
-    markup.add(btn1, btn2, btn3)
+    btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2, btn3, btn4)
     text_block("Вы можете изменить информацию о наборах, добавить новые наборы, а также удалить не нужные.", message, markup)
 
 
 def addsetsfortnite(message):
     markup = types.InlineKeyboardMarkup()
     btn1 = types.InlineKeyboardButton("Назад", callback_data="admfortnite")
-    markup.add(btn1)
+    btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2)
     text_block("Напишите название нового набора:", message, markup)
     bot.register_next_step_handler(message, get_name)
 
@@ -26,7 +28,8 @@ def get_name(message):
     name = message.text
     markup = types.InlineKeyboardMarkup()
     btn1 = types.InlineKeyboardButton("Назад", callback_data="admfortnite")
-    markup.add(btn1)
+    btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2)
     bot.send_message(message.chat.id, 
                text="Напишите описание нового набора:".format(message.from_user), 
                reply_markup=markup)
@@ -37,7 +40,8 @@ def get_description(message, l):
     description = message.text
     markup = types.InlineKeyboardMarkup()
     btn1 = types.InlineKeyboardButton("Назад", callback_data="admfortnite")
-    markup.add(btn1)
+    btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2)
     bot.send_message(message.chat.id, 
                text="Напишите стоимость нового набора:".format(message.from_user), 
                reply_markup=markup)
@@ -49,7 +53,8 @@ def get_price(message, l):
     price = message.text
     markup = types.InlineKeyboardMarkup()
     btn1 = types.InlineKeyboardButton("Назад", callback_data="admfortnite")
-    markup.add(btn1)
+    btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2)
     bot.send_message(message.chat.id, 
                text="Отправьте фото набора:".format(message.from_user), 
                reply_markup=markup)
@@ -60,7 +65,8 @@ def get_price(message, l):
 def get_photo(message, l):
     markup = types.InlineKeyboardMarkup()
     btn1 = types.InlineKeyboardButton("Назад", callback_data="admfortnite")
-    markup.add(btn1)
+    btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2)
     bot.send_message(message.chat.id, 
                text="Готово".format(message.from_user), 
                reply_markup=markup)
@@ -87,6 +93,6 @@ def delsetsfortnite(message):
     fortnitesets = [[row[2], row[6]] for row in rows]
     for name in fortnitesets:
         markup.row(types.InlineKeyboardButton(name[0], callback_data='delsetsfortnite_'+name[0]))
-    markup.row(types.InlineKeyboardButton('Назад', callback_data='admfortnite'))
+    markup.row(types.InlineKeyboardButton('Назад', callback_data='admfortnite'), types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu"))
     text_block("Выберите набор, который хотите удалить.", message, markup)
     

@@ -12,7 +12,8 @@ def buygamedlc(message):
     btn3 = types.InlineKeyboardButton("Как узнать", callback_data="buygamedlchowtofind")
     markup.row(btn3)
     btn4 = types.InlineKeyboardButton("Назад", callback_data="Epic Games")
-    markup.row(btn4)
+    btn5 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.row(btn4, btn5)
     img_block(r'src\BuyGameDLC\gamedlc.jpg', message, markup, text="Вы меняли регион за последние 6 месяцев?")
 
 
@@ -21,7 +22,8 @@ def buygamedlc_noeditmenu(message):
     btn1 = types.InlineKeyboardButton("Игры", callback_data="Игры")
     btn2 = types.InlineKeyboardButton("DLC", callback_data="DLC")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="Покупка игр и DLC")
-    markup.add(btn1, btn2, btn3)
+    btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2, btn3, btn4)
     img_block(r'src\BuyGameDLC\gamedlc.jpg', message, markup)
 
 
@@ -30,14 +32,16 @@ def buygamedlc_yeseditmenu(message):
     btn1 = types.InlineKeyboardButton("Турция", callback_data="buygamedlcnoeditmenu")
     btn2 = types.InlineKeyboardButton("Другая", callback_data="othercountry")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="Покупка игр и DLC")
-    markup.add(btn1, btn2, btn3)
+    btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2, btn3, btn4)
     img_block(r'src\BuyGameDLC\gamedlc.jpg', message, markup, text="Какая страна стоит?")
 
 
 def buygamedlc_howtofind(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Назад", callback_data="Покупка игр и DLC")
-    markup.add(btn1)
+    btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2)
     img_block(r'src\BuyGameDLC\gamedlc.jpg', message, markup, text="Инструкция будет*")
   
 
@@ -64,14 +68,15 @@ def gameegs(message, t=''):
             except:
                 markup.row(types.InlineKeyboardButton(name_game[i], callback_data=name_game[i]))
     markup.row(types.InlineKeyboardButton('Другие игры', callback_data='othergamesegs'))
-    markup.row(types.InlineKeyboardButton('Назад', callback_data='buygamedlcnoeditmenu'))
+    markup.row(types.InlineKeyboardButton('Назад', callback_data='buygamedlcnoeditmenu'), types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu"))
     img_block(r'src\BuyGameDLC\game.jpg', message, markup, text=t)
 
 
 def othergamesegs(message):
     markup = types.InlineKeyboardMarkup()
     btn1 = types.InlineKeyboardButton("Назад", callback_data="Игры")
-    markup.add(btn1)
+    btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2)
     img_block(r'src\BuyGameDLC\game.jpg', 
               message, 
               markup, 
@@ -94,7 +99,8 @@ def get_sum(message):
         markup = types.InlineKeyboardMarkup()
         btn1 = types.InlineKeyboardButton("Продолжить", callback_data="NextPayGame")
         btn2 = types.InlineKeyboardButton("Назад", callback_data="BackToOG")
-        markup.add(btn1, btn2)
+        btn3 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+        markup.add(btn1, btn2, btn3)
         bot.send_message(message.chat.id, 
                      text=f"К оплате {rublzn} руб.".format(message.from_user), 
                      reply_markup=markup)
@@ -112,8 +118,9 @@ def get_sum(message):
         btn7 = types.InlineKeyboardButton("FIFA 23 «Standard»", callback_data="FIFA 23 «Standard»")
         markup.row(btn7)
         btn8 = types.InlineKeyboardButton("Назад", callback_data="Нет, не менял")
+        btn10 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
         btn9 = types.InlineKeyboardButton("Другие игры", callback_data="Другие игры")
-        markup.row(btn8, btn9)
+        markup.row(btn8, btn10, btn9)
         photo = open(r'src\BuyGameDLC\game.jpg', 'rb')
         bot.send_photo(message.chat.id, photo, caption="Неправильно введено значение, повторите операцию.", reply_markup=markup)
 
@@ -121,7 +128,8 @@ def get_sum(message):
 def netxpaygame(message):
     markup = types.InlineKeyboardMarkup()
     btn1 = types.InlineKeyboardButton("Назад", callback_data="BackToOG")
-    markup.add(btn1)
+    btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2)
     bot.send_message(message.chat.id, 
                      text="Напишите полное название игры, как написано в Epic Games.".format(message.from_user), 
                      reply_markup=markup)
@@ -132,7 +140,8 @@ def get_namegame(message):
     namegame = message.text
     markup = types.InlineKeyboardMarkup()
     btn1 = types.InlineKeyboardButton("Назад", callback_data="BackToOG")
-    markup.add(btn1)
+    btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2)
     bot.send_message(message.chat.id, 
                      text="Напишите вашу почту.".format(message.from_user), 
                      reply_markup=markup)
@@ -143,7 +152,8 @@ def get_sendemail(message):
     nameemail = message.text
     markup = types.InlineKeyboardMarkup()
     btn1 = types.InlineKeyboardButton("Назад", callback_data="BackToOG")
-    markup.add(btn1)
+    btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2)
     bot.send_message(message.chat.id, 
                      text="Напишите ваш логин.".format(message.from_user), 
                      reply_markup=markup)
@@ -154,7 +164,8 @@ def get_sendlogin(message):
     namelogin = message.text
     markup = types.InlineKeyboardMarkup()
     btn1 = types.InlineKeyboardButton("Назад", callback_data="BackToOG")
-    markup.add(btn1)
+    btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2)
     bot.send_message(message.chat.id, 
                      text="Оплатите...".format(message.from_user), 
                      reply_markup=markup)
@@ -164,7 +175,8 @@ def dlcegs(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Dead by daylight", callback_data="DLCBUY")
     btn2 = types.InlineKeyboardButton("Назад", callback_data="Нет, не менял")
-    markup.add(btn1, btn2)
+    btn3 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2, btn3)
     img_block(r'src\BuyGameDLC\dlc.jpg', message, markup, text='')
 
 
@@ -172,7 +184,7 @@ def dlcbuy(message):
     markup = types.InlineKeyboardMarkup(row_width=1)
     btn1 = types.InlineKeyboardButton("Купить", callback_data="1_pagedlcbuy")
     btn2 = types.InlineKeyboardButton("Назад", callback_data="DLC")
-    btn3 = types.InlineKeyboardButton("Меню", callback_data="BackToMenu")
+    btn3 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
     markup.add(btn1, btn2, btn3)
     img_block(r'src\BuyGameDLC\dlc.jpg', message, markup, text="")
 
@@ -199,7 +211,7 @@ def dlcNpage(message, number_page):
                 except:
                     markup.row(types.InlineKeyboardButton(name_dlc[i], callback_data=name_dlc[i]))
     markup.row(*[types.InlineKeyboardButton(str(i), callback_data=f"{i}_pagedlcbuy") for i in range(1, cout_page + 1)])
-    markup.row(types.InlineKeyboardButton('Назад', callback_data='DLC'))
+    markup.row(types.InlineKeyboardButton('Назад', callback_data='DLC'), types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu"))
     img_block(f'src\\BuyGameDLC\\dlc{number_page}.jpg', message, markup, text="Инструкция будет*")
 
 

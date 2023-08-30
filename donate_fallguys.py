@@ -13,7 +13,8 @@ def fall_guys(message):
     btn3 = types.InlineKeyboardButton("Как узнать", callback_data="donatefallguyshowtofind")
     markup.row(btn3)
     btn4 = types.InlineKeyboardButton("Назад", callback_data="Донат")
-    markup.row(btn4)
+    btn5 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.row(btn4, btn5)
     img_block(r'src\Donate\fallgays.jpg', message, markup, text="Вы меняли регион за последние 6 месяцев?")
 
 
@@ -22,7 +23,8 @@ def donate_fall_guys_noeditmenu(message):
     btn1 = types.InlineKeyboardButton("Шмяксы", callback_data="shmacks")
     btn2 = types.InlineKeyboardButton("Наборы", callback_data="fallguysset")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="fallguys")
-    markup.add(btn1, btn2, btn3)
+    btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2, btn3, btn4)
     img_block(r'src\Donate\fallgays.jpg', message, markup)
 
 
@@ -31,7 +33,8 @@ def donate_fall_guys_yeseditmenu(message):
     btn1 = types.InlineKeyboardButton("Турция", callback_data="donatefallguysnoeditmenu")
     btn2 = types.InlineKeyboardButton("Другая", callback_data="othercountry")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="fallguys")
-    markup.add(btn1, btn2, btn3)
+    btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2, btn3, btn4)
     img_block(r'src\Donate\fallgays.jpg', message, markup, text="Какая страна стоит?")
 
 
@@ -49,7 +52,8 @@ def shmacks(message):
     btn3 = types.InlineKeyboardButton("5000", callback_data="5000shmacks")
     btn4 = types.InlineKeyboardButton("13500", callback_data="13500shmacks")
     btn5 = types.InlineKeyboardButton("Назад", callback_data="donatefallguysnoeditmenu")
-    markup.add(btn1, btn2, btn3, btn4, btn5)
+    btn6 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2, btn3, btn4, btn5, btn6)
     img_block(r'src\Donate\fg-vbucks.jpg', message, markup)
 
 
@@ -68,5 +72,5 @@ def fall_guys_set(message):
                             types.InlineKeyboardButton(name_fallguysset[i + 1], callback_data=name_fallguysset[i + 1]))
             except:
                 markup.row(types.InlineKeyboardButton(name_fallguysset[i], callback_data=name_fallguysset[i]))
-    markup.row(types.InlineKeyboardButton('Назад', callback_data='donatefallguysnoeditmenu'))
+    markup.row(types.InlineKeyboardButton('Назад', callback_data='donatefallguysnoeditmenu'), types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu"))
     img_block(r'src\Donate\fallgays.jpg', message, markup)

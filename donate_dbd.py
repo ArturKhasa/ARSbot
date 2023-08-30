@@ -11,7 +11,8 @@ def dead_by_daylight(message):
     btn3 = types.InlineKeyboardButton("Как узнать", callback_data="donatedeadbydaylighthowtofind")
     markup.row(btn3)
     btn4 = types.InlineKeyboardButton("Назад", callback_data="Донат")
-    markup.row(btn4)
+    btn5 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.row(btn4, btn5)
     img_block(r'src\Donate\deadbydaylight.jpg', message, markup, text="Вы меняли регион за последние 6 месяцев?")
 
 
@@ -19,7 +20,8 @@ def donate_dead_by_daylight_noeditmenu(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Золотые клетки", callback_data="goldencage")
     btn2 = types.InlineKeyboardButton("Назад", callback_data="deadbydaylight")
-    markup.add(btn1, btn2)
+    btn3 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2, btn3)
     img_block(r'src\Donate\deadbydaylight.jpg', message, markup)
 
 
@@ -28,14 +30,16 @@ def donate_dead_by_daylight_yeseditmenu(message):
     btn1 = types.InlineKeyboardButton("Турция", callback_data="donatedeadbydaylightnoeditmenu")
     btn2 = types.InlineKeyboardButton("Другая", callback_data="othercountry")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="deadbydaylight")
-    markup.add(btn1, btn2, btn3)
+    btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2, btn3, btn4)
     img_block(r'src\Donate\deadbydaylight.jpg', message, markup, text="Какая страна стоит?")
 
 
 def donate_dead_by_daylight_howtofind(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Назад", callback_data="deadbydaylight")
-    markup.add(btn1)
+    btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2)
     img_block(r'src\Donate\deadbydaylight.jpg', message, markup, text="Инструкция будет*")
 
 
@@ -48,5 +52,6 @@ def golden_cage(message):
     btn5 = types.InlineKeyboardButton("6000", callback_data="6000goldencage")
     btn6 = types.InlineKeyboardButton("12500", callback_data="12500goldencage")
     btn7 = types.InlineKeyboardButton("Назад", callback_data="donatedeadbydaylightnoeditmenu")
-    markup.add(btn1, btn2, btn3, btn4, btn5, btn6, btn7)
+    btn8 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8)
     img_block(r'src\Donate\dbd-golden_cage.jpg', message, markup)

@@ -36,8 +36,8 @@ def admin(message):
         # btn3 = types.InlineKeyboardButton("Dead by daylight", callback_data="admdeadbydaylight")
         btn4 = types.InlineKeyboardButton("Выйти с админ панели", callback_data='BackToMenu')
         markup.add(btn1, btn4)
-        bot.send_message(message.chat.id, 
-                        text="Выберите блок, который нужно изменить.", 
+        bot.send_message(message.chat.id,
+                        text="Выберите блок, который нужно изменить.",
                         reply_markup=markup)
     else:
         pass
@@ -70,7 +70,7 @@ def get_feedback(message, l):
     photo.close()
     os.remove(l[0])
     markup = types.InlineKeyboardMarkup()
-    btn1 = types.InlineKeyboardButton("Назад", callback_data="Отзывы 📕")
+    btn1 = types.InlineKeyboardButton("Назад", callback_data="BackToMenu")
     markup.add(btn1)
     bot.send_message(message.chat.id, 
                text="Спасибо за отзыв!".format(message.from_user), 
@@ -121,7 +121,8 @@ def egsblock(message):
     btn1 = types.InlineKeyboardButton("Донат", callback_data="Донат")
     btn2 = types.InlineKeyboardButton("Покупка игр и DLC", callback_data="Покупка игр и DLC")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="Магазин 🛒")
-    markup.add(btn1, btn2, btn3)
+    btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.add(btn1, btn2, btn3, btn4)
     img_block(r'src\EGS\EpicGames.jpg', message, markup)
 
 
@@ -133,7 +134,8 @@ def donate(message):
     btn3 = types.InlineKeyboardButton("Dead by daylight", callback_data="deadbydaylight")
     markup.row(btn3)
     btn4 = types.InlineKeyboardButton("Назад", callback_data="Epic Games")
-    markup.row(btn4)
+    btn5 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+    markup.row(btn4, btn5)
     img_block(r'src\Donate\donate.jpg', message, markup)
 
 
@@ -223,7 +225,8 @@ def callback_handler(call):
             def function1():
                 markup = types.InlineKeyboardMarkup()
                 btn1 = types.InlineKeyboardButton("Назад", callback_data="Игры")
-                markup.add(btn1)
+                btn2 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+                markup.add(btn1, btn2)
                 text='Зайдите на аккаунт epic games по этим данным:\nЛогин: raroci4898@chotunai.com\nПароль: arsgamestore1\nНайдите игру, которую вы хотите купить и напишите её стоимость, которая вам показана на этом аккаунте, боту в сообщении'
                 photo = open(r'src\BuyGameDLC\game.jpg', 'rb')
                 bot.send_photo(call.message.chat.id, photo, caption=text, reply_markup=markup)
@@ -316,7 +319,8 @@ def callback_handler(call):
                 btn1 = types.InlineKeyboardButton("Да, привязана", callback_data="xboxaccoutyeslinked")
                 btn2 = types.InlineKeyboardButton("Как привязать?", callback_data="xboxaccouthowlinked")
                 btn3 = types.InlineKeyboardButton("Назад", callback_data="epicgamesaccount")
-                markup.add(btn1, btn2, btn3)
+                btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
+                markup.add(btn1, btn2, btn3, btn4)
                 photo = open(r'src\Donate\fortnite_xbox.jpg', 'rb')
                 bot.send_photo(call.message.chat.id, photo, caption="У вас привязана учетная запись microsoft xbox к epic games?", reply_markup=markup)
             
