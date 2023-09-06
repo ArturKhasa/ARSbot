@@ -16,12 +16,13 @@ from PIL import Image
 @bot.message_handler(commands=['start'])
 def menu(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
-    btn1 = types.InlineKeyboardButton("Магазин 🛒", callback_data="Магазин 🛒")
-    btn2 = types.InlineKeyboardButton("Кабинет 👤", callback_data="Кабинет 👤")
-    btn3 = types.InlineKeyboardButton("Отзывы 📕", callback_data="Отзывы 📕")
-    btn4 = types.InlineKeyboardButton("F.A.Q 📌", callback_data="F.A.Q 📌")
-    btn5 = types.InlineKeyboardButton("Поддержка 👨‍💻", url='https://t.me/GameShopARS')
-    markup.add(btn1, btn2, btn3, btn4, btn5)
+    btn1 = types.InlineKeyboardButton("Магазин 🎮", callback_data="Магазин 🎮")
+    btn2 = types.InlineKeyboardButton("Кабинет 🪪", callback_data="Кабинет 🪪")
+    btn3 = types.InlineKeyboardButton("Корзина 🛒", callback_data="Корзина 🛒")
+    btn4 = types.InlineKeyboardButton("Отзывы 💌", callback_data="Отзывы 💌")
+    btn5 = types.InlineKeyboardButton("F.A.Q 📌", callback_data="F.A.Q 📌")
+    btn6 = types.InlineKeyboardButton("Поддержка 👨‍💻", url='https://t.me/GameShopARS')
+    markup.add(btn1, btn2, btn3, btn4, btn5, btn6)
     photo = open(r'src\Menu\menu.jpg', 'rb')
     bot.send_photo(message.chat.id, photo, reply_markup=markup)
 
@@ -138,17 +139,22 @@ def donate(message):
     markup.row(btn4, btn5)
     img_block(r'src\Donate\donate.jpg', message, markup)
 
+ 
+
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
     if call.message:
-        if call.data == 'Магазин 🛒':
+        if call.data == 'Магазин 🎮':
             store(call.message)
 
-        elif call.data == 'Кабинет 👤':
+        elif call.data == 'Корзина 🛒':
+            pass
+
+        elif call.data == 'Кабинет 🪪':
             office(call.message)
 
-        elif call.data == 'Отзывы 📕':
+        elif call.data == 'Отзывы 💌':
             reviews(call.message)
 
         elif call.data == 'F.A.Q 📌':
