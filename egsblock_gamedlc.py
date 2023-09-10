@@ -53,6 +53,7 @@ def othercountry(message):
 
 
 def gameegs(message, t=''):
+    bot.clear_step_handler_by_chat_id(message.chat.id)
     markup = types.InlineKeyboardMarkup()
     name_game = [i for i in game.keys()]
     count_el_page = len(name_game)
@@ -174,7 +175,7 @@ def get_sendlogin(message):
 def dlcegs(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Dead by daylight", callback_data="DLCBUY")
-    btn2 = types.InlineKeyboardButton("Назад", callback_data="Нет, не менял")
+    btn2 = types.InlineKeyboardButton("Назад", callback_data="buygamedlcnoeditmenu")
     btn3 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
     markup.add(btn1, btn2, btn3)
     img_block(r'src\BuyGameDLC\dlc.jpg', message, markup, text='')

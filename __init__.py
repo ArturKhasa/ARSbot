@@ -15,6 +15,7 @@ from PIL import Image
 
 @bot.message_handler(commands=['start'])
 def menu(message):
+    bot.clear_step_handler_by_chat_id(message.chat.id)
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Магазин 🎮", callback_data="Магазин 🎮")
     btn2 = types.InlineKeyboardButton("Кабинет 🪪", callback_data="Кабинет 🪪")
@@ -48,7 +49,7 @@ def admin(message):
 def send_feedback_message(message):
     bot.clear_step_handler_by_chat_id(message.chat.id)
     markup = types.InlineKeyboardMarkup(row_width=1)
-    btn1 = types.InlineKeyboardButton("Назад", callback_data="Отзывы 📕")
+    btn1 = types.InlineKeyboardButton("Назад", callback_data="Отзывы 💌")
     markup.add(btn1)
     chat_id = message.chat.id
     photos = bot.get_user_profile_photos(chat_id)
@@ -121,7 +122,7 @@ def egsblock(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Донат", callback_data="Донат")
     btn2 = types.InlineKeyboardButton("Покупка игр и DLC", callback_data="Покупка игр и DLC")
-    btn3 = types.InlineKeyboardButton("Назад", callback_data="Магазин 🛒")
+    btn3 = types.InlineKeyboardButton("Назад", callback_data="Магазин 🎮")
     btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
     markup.add(btn1, btn2, btn3, btn4)
     img_block(r'src\EGS\EpicGames.jpg', message, markup)
@@ -207,11 +208,12 @@ def callback_handler(call):
                 dlcNpage(call.message, int(call.data.split('_')[0]))
 
             elif call.data.split('_')[1] == 'vbucks':
-                pass
+                l = call.data.split('_')
+                N_vbucks(call.message, l[0], "vbucksxbox" if l[2] == "xboxaccout" else "vbucksegs")
 
         elif len(call.data.split('_')) > 1:
             if call.data.split('_')[0] == 'setsfortnite':
-                name_sets_egs_xbox(call.message, call.data.split('_')[1])
+                name_sets_egs_xbox(call.message, call.data.split('_')[1], "setsegsxboxxbox" if call.data.split('_')[2] == "xboxaccout" else "setsegsxboxegs")
             
             elif call.data.split('_')[0] == 'delsetsfortnite':
                 os.remove(f"src\\Donate\\{call.data.split('_')[1]}.jpg")
@@ -295,7 +297,7 @@ def callback_handler(call):
         elif call.data == "xboxaccout":
             xboxaccout(call.message)
 
-        elif call.data == "epicgamesaccountnoeditmenu":
+        elif call.data == "epicgamesaccountnoeditmenu" or call.data == "egsnem":
             epicgamesaccount_noeditmenu(call.message)
 
         elif call.data == "epicgamesaccountyeseditmenu":
@@ -307,11 +309,17 @@ def callback_handler(call):
         elif call.data == "epicgamesaccountanother":
             epicgamesaccount_another(call.message)
 
-        elif call.data == "vbucks":
-            vbucks(call.message)
+        elif call.data == "vbucksegs":
+            vbucks(call.message, "egsnem")
 
-        elif call.data == "setsegsxbox":
-            sets_egs_xbox(call.message)
+        elif call.data == "setsegsxboxegs":
+            sets_egs_xbox(call.message, "egsnem")
+
+        elif call.data == "vbucksxbox":
+            vbucks(call.message, "xboxaccoutyeslinked")
+
+        elif call.data == "setsegsxboxxbox":
+            sets_egs_xbox(call.message, "xboxaccoutyeslinked")
 
         elif call.data == "xboxaccoutyeslinked":
             xboxaccout_yeslinked(call.message)

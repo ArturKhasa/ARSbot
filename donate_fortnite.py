@@ -29,8 +29,8 @@ def epicgamesaccount(message):
   
 def epicgamesaccount_noeditmenu(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
-    btn1 = types.InlineKeyboardButton("V-bucks", callback_data="vbucks")
-    btn2 = types.InlineKeyboardButton("Наборы", callback_data="setsegsxbox")
+    btn1 = types.InlineKeyboardButton("V-bucks", callback_data="vbucksegs")
+    btn2 = types.InlineKeyboardButton("Наборы", callback_data="setsegsxboxegs")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="epicgamesaccount")
     btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
     markup.add(btn1, btn2, btn3, btn4)
@@ -75,8 +75,8 @@ def xboxaccout(message):
 
 def xboxaccout_yeslinked(message):
     markup = types.InlineKeyboardMarkup(row_width=2)
-    btn1 = types.InlineKeyboardButton("V-bucks", callback_data="vbucks")
-    btn2 = types.InlineKeyboardButton("Наборы", callback_data="setsegsxbox")
+    btn1 = types.InlineKeyboardButton("V-bucks", callback_data="vbucksxbox")
+    btn2 = types.InlineKeyboardButton("Наборы", callback_data="setsegsxboxxbox")
     btn3 = types.InlineKeyboardButton("Назад", callback_data="fortnite")
     btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
     markup.add(btn1, btn2, btn3, btn4)
@@ -91,41 +91,42 @@ def xboxaccout_howlinked(message):
     text_block("Инструкция будет*", message, markup)
 
 
-def vbucks(message):
+def vbucks(message, back):
     markup = types.InlineKeyboardMarkup(row_width=2)
-    btn1 = types.InlineKeyboardButton("1000", callback_data="1000_vbucks")
-    btn2 = types.InlineKeyboardButton("2800", callback_data="2800_vbucks")
-    btn3 = types.InlineKeyboardButton("5000", callback_data="5000_vbucks")
-    btn4 = types.InlineKeyboardButton("13500", callback_data="13500_vbucks")
-    btn5 = types.InlineKeyboardButton("Назад", callback_data="fortnite")
+    btn1 = types.InlineKeyboardButton("1000", callback_data="1000_vbucks"+"_"+back)
+    btn2 = types.InlineKeyboardButton("2800", callback_data="2800_vbucks"+"_"+back)
+    btn3 = types.InlineKeyboardButton("5000", callback_data="5000_vbucks"+"_"+back)
+    btn4 = types.InlineKeyboardButton("13500", callback_data="13500_vbucks"+"_"+back)
+    btn5 = types.InlineKeyboardButton("Назад", callback_data=back)
     btn6 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
     markup.add(btn1, btn2, btn3, btn4, btn5, btn6)
     img_block(r'src\Donate\fortnite_vbucks.jpg', message, markup)
 
 
-def N_vbucks(message, N):
+def N_vbucks(message, N, back):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Купить", callback_data=f"{N}_vbucks_buy")
     btn2 = types.InlineKeyboardButton("Добавить в корзину", callback_data=f"{N}_vbucks_buy")
-    btn3 = types.InlineKeyboardButton("Назад", callback_data="vbucks")
+    btn3 = types.InlineKeyboardButton("Назад", callback_data=back)
     btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
     markup.add(btn1, btn2, btn3, btn4)
     img_block(f'src\\Donate\\{N}_vbucks.jpg', message, markup)
 
 
-def sets_egs_xbox(message):
-    markup = types.InlineKeyboardMarkup(row_width=1)
+def sets_egs_xbox(message, back):
+    markup = types.InlineKeyboardMarkup()
     cur = conn.cursor()
     cur.execute("SELECT * FROM kits LEFT JOIN kits_description ON kits.id = kits_description.kit_id")
     rows = cur.fetchall()
     fortnitesets = [[row[2], row[6]] for row in rows]
     for name in fortnitesets:
-        markup.row(types.InlineKeyboardButton(name[0], callback_data='setsfortnite_'+name[0]))
-    markup.row(types.InlineKeyboardButton('Назад', callback_data='fortnite'), types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu"))
-    img_block(r'src\Donate\fortnite_sets.jpg', message, markup)
+        name_callback = 'setsfortnite_'+ name[0] + "_" + back
+        markup.row(types.InlineKeyboardButton(name[0], callback_data=name_callback))
+    markup.row(types.InlineKeyboardButton('Назад', callback_data=back), types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu"))
+    img_block('src\\Donate\\fortnite_sets.jpg', message, markup)
 
 
-def name_sets_egs_xbox(message, name):
+def name_sets_egs_xbox(message, name, back):
     # conn = sqlite3.connect('DataBase\\database.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM kits LEFT JOIN kits_description ON kits.id = kits_description.kit_id WHERE name = %s", (name, ))
@@ -133,7 +134,7 @@ def name_sets_egs_xbox(message, name):
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Купить", callback_data=f"{rows[0][2]}_buy")
     btn2 = types.InlineKeyboardButton("Добавить в корзину", callback_data=f"{rows[0][2]}_buy")
-    btn3 = types.InlineKeyboardButton("Назад", callback_data="setsegsxbox")
+    btn3 = types.InlineKeyboardButton("Назад", callback_data=back)
     btn4 = types.InlineKeyboardButton("Главное меню", callback_data="BackToMenu")
     markup.add(btn1, btn2, btn3, btn4)
     img_block(f'src\\Donate\\{name}.jpg', message, markup, rows[0][6])
