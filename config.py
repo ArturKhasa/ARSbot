@@ -2,7 +2,7 @@ import telebot
 import psycopg2
 import sqlite3
 
-TOKEN = '6624918758:AAFadnGUqxWAukhkDU22pSEeVMUy-Coe0wI'
+TOKEN = '6668402751:AAHvjdKsykwnhN_tnMbIwgscZLbW71lCQR4'
 
 bot = telebot.TeleBot(TOKEN)
 

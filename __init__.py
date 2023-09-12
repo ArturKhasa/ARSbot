@@ -10,12 +10,20 @@ from donate_dbd import *
 from donate_fallguys import *
 from donate_fortnite import *
 from admin_panel import *
-from PIL import Image
+from config import conn
 
 
 @bot.message_handler(commands=['start'])
 def menu(message):
     bot.clear_step_handler_by_chat_id(message.chat.id)
+    if len(message.text.split()) > 1:
+        refs_id = int(message.text.split()[1].replace("refs", ""))
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM referrals WHERE invited_telegram_id = %s", (message.from_user.id, ))
+        rows = cursor.fetchall()
+        if len(rows) == 0:
+            cursor.execute('INSERT INTO referrals (creator_telegram_id, invited_telegram_id) VALUES(%s, %s)', (refs_id, message.from_user.id))
+            conn.commit()
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn1 = types.InlineKeyboardButton("Магазин 🎮", callback_data="Магазин 🎮")
     btn2 = types.InlineKeyboardButton("Кабинет 🪪", callback_data="Кабинет 🪪")
@@ -94,12 +102,33 @@ def store(message):
 
 def office(message):
     markup = types.InlineKeyboardMarkup(row_width=1)
-    btn1 = types.InlineKeyboardButton("Реферальная ссылка", callback_data="Реферальная ссылка")
+    btn1 = types.InlineKeyboardButton("Реферальная ссылка", callback_data="refurls")
     btn2 = types.InlineKeyboardButton("Пополнить баланс", callback_data="Пополнить баланс")
-    btn3 = types.InlineKeyboardButton("История заказов", callback_data="История заказов")
+    btn3 = types.InlineKeyboardButton("История заказов", callback_data="orderhistories")
     btn4 = types.InlineKeyboardButton("Назад", callback_data="BackToMenu")
     markup.add(btn1, btn2, btn3, btn4)
     img_block(r'src\Office\office.jpg', message, markup)
+
+
+def refurls(message):
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    btn1 = types.InlineKeyboardButton("Назад", callback_data="Кабинет 🪪")
+    markup.add(btn1)
+    img_block(r'src\Office\office.jpg', message, markup, text=f'Реферальная ссылка: t.me/Egsss_bot?start=refs{message.from_user.id}')
+
+
+def orderhistories(message):
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    btn1 = types.InlineKeyboardButton("Назад", callback_data="Кабинет 🪪")
+    markup.add(btn1)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM order_histories WHERE telegram_id = %s", (message.from_user.id, ))
+    rows = cursor.fetchall()
+    if len(rows) != 0:
+        description = "Ваша история покупок:\n" + "\n".join([f"{i + 1}. " + product[2] for i, product in enumerate(rows)])
+    else:
+        description = "У Вас ещё нет истории покупок, но всё еще впереди!"
+    img_block(r'src\Office\office.jpg', message, markup, text=description)
 
 
 def reviews(message):
@@ -154,6 +183,12 @@ def callback_handler(call):
 
         elif call.data == 'Кабинет 🪪':
             office(call.message)
+
+        elif call.data == 'refurls':
+            refurls(call.message)
+
+        elif call.data == "orderhistories":
+            orderhistories(call.message)
 
         elif call.data == 'Отзывы 💌':
             reviews(call.message)
